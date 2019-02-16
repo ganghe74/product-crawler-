@@ -8,7 +8,7 @@ from main.models import Product, Price
 from django.utils import timezone
 
 def parse():
-    driver = webdriver.Chrome('C:\\chromedriver')
+    driver = webdriver.PhantomJS()
     driver.get('http://prod.danawa.com/list/?cate=112752')
     html = driver.page_source
     soup = BeautifulSoup(html, 'html.parser')
