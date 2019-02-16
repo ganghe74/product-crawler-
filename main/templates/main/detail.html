@@ -1,6 +1,10 @@
 <h1>{{ product.name }}</h1>
+{% if product.price_set.all %}
 <ul>
-{% for price in product.price_set.all %}
-    <li>{{ price }}원</li>
-{% endfor %}
+    {% for price in product.price_set.all %}
+        <li>{{ price }}원</li>
+    {% endfor %}
 </ul>
+{% else %}
+    <p>No data</p>
+{% endif %}

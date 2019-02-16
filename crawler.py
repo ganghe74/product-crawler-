@@ -29,10 +29,10 @@ if __name__ == '__main__':
     product_list = parse()
     for n, p in product_list.items():
         product, created = Product.objects.get_or_create(
-            name=n
+            name = n
         )
         product.price_set.create(
-            date = timezone.localtime(),
+            date = timezone.now(),
             price = p
         )
         product.save()
