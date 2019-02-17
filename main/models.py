@@ -12,4 +12,4 @@ class Price(models.Model):
     price = models.IntegerField(default = 0)
 
     def __str__(self):
-        return str(self.date.date()) + " : " +str(self.price)
+        return str(self.date) + " : " +str(self.price)
