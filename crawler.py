@@ -26,17 +26,29 @@ def parse():
     return result
 
 if __name__ == '__main__':
-    print("Start at", timezone.now())
+    now = timezone.now()
+    print("="*35)
+    print("Start at", now)
+    
     product_list = parse()
     for n, p in product_list.items():
         product, created = Product.objects.get_or_create(
             name = n
         )
         if created:
-            print(n, "Created")
-        product.price_set.create(
-            date = timezone.now(),
-            price = p
-        )
+            print("Create |", n)
+        
+        latest_price = product.price_set.latest('date')
+        latest_date = latest_price.date.date()
+        if latest_date == now.date() and latest_price.price == p:
+            continue
+        else:
+            product.price_set.create(
+                date = timezone.now(),
+                price = p
+            )
+            print("Save |", n)
         product.save()
-    print("Done at", timezone.now(), ",", len(product_list), "items")
+
+    now = timezone.now()
+    print("Done at", now, ",", len(product_list), "items")
