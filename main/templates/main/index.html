@@ -1,12 +1,21 @@
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
-{% if product_list %}
-    <h1>Product List</h1>
-    <ul>
-    {% for product in product_list %}
-        <li><a href="/{{ product.id }}/">{{ product.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No product</p>
-{% endif %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Product List</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
+    </head>
+    <body>
+        {% if product_list %}
+            <h1>Product List</h1>
+            <ul>
+            {% for product in product_list %}
+                <li><a href="/{{ product.id }}/">{{ product.name }}</a></li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No product</p>
+        {% endif %}
+    </body>
+</html>

@@ -8,4 +8,8 @@ def index(request):
 
 def detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    return render(request, 'main/detail.html', {'product': product})
+    context = {
+        'product': product,
+        'recent_price_list': product.price_set.all()
+    }
+    return render(request, 'main/detail.html', context)
