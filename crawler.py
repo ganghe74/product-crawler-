@@ -35,19 +35,24 @@ if __name__ == '__main__':
         product, created = Product.objects.get_or_create(
             name = n
         )
+
         if created:
-            print("Create |", n)
-        
-        latest_price = product.price_set.latest('date')
-        latest_date = latest_price.date.date()
-        if latest_date == now.date() and latest_price.price == p:
-            continue
+            print("Create |", n)        
         else:
-            product.price_set.create(
-                date = timezone.now(),
-                price = p
-            )
-            print("Save |", n)
+            try:
+                latest_price = product.price_set.latest('date')
+                latest_date = latest_price.date.date()
+                if latest_date == now.date() and latest_price.price == p:
+                    continue
+            except:
+                print("Error | latest_price DoesNotExist, Product :", n)
+
+
+        product.price_set.create(
+            date = timezone.now(),
+            price = p
+        )
+        print("Save |", n)
         product.save()
 
     now = timezone.now()
