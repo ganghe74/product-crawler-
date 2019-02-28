@@ -1,0 +1,10 @@
+<h1>{{ product.name }} 에 대한</h1>
+<h1>{{ subscriber.email_hidden }} 님의</h1>
+<h1>Unsubscribe page</h1>
+<form method="POST">{% csrf_token %}
+    <p>
+        <label for="id_email">Email:</label>
+        <input type="email" name="email" maxlength="254" required id="id_email">
+    </p>
+    <button type="submit">Submit</button>
+</form>

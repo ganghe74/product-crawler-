@@ -1,0 +1,13 @@
+<h1>Subscribe Page</h1>
+<h2><a href="../">{{ product.name }}</a></h2>
+<p>매 시에 가격을 확인하여 Min price 미만, or Max price 초과의 경우에 Email을 보냅니다.</p>
+<hr>
+<form method="POST">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+<hr>
+<h1>Subscribers</h1>
+{% for s in subscribers %}
+<b>{{ s.email_hidden }}</b> : {{ s.registration_date.date }} ~ {{ s.expiry_date.date }} <small><a href="../../unsubscribe/{{ s.id }}">X</a></small><br>
+{% endfor %}
