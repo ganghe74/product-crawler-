@@ -54,3 +54,10 @@ def unsubscribe(request, subscriber_id):
         'subscriber': subscriber,
     }
     return render(request, 'main/subscribe/unsubscribe.html', context)
+
+def subscribe_detail(request, subscriber_id):
+    subscriber = get_object_or_404(Subscriber, pk=subscriber_id)
+    context = {
+        'subscriber': subscriber,
+    }
+    return render(request, 'main/subscribe/detail.html', context)

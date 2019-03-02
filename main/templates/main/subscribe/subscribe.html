@@ -16,7 +16,7 @@
         <hr>
         <h1>Subscribers</h1>
         {% for s in subscribers %}
-        <b>{{ s.email_hidden }}</b> : {{ s.registration_date.date }} ~ {{ s.expiry_date.date }} <small><a href="../../unsubscribe/{{ s.id }}">X</a></small><br>
+        <b><a href="/detail/{{ s.id }}">{{ s.email_hidden }}</a></b> : {{ s.registration_date.date }} ~ {{ s.expiry_date.date }} <small><a href="../../unsubscribe/{{ s.id }}">X</a></small><br>
         {% endfor %}
     </body>
 </html>

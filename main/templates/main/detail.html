@@ -9,7 +9,7 @@
     <body>
         <small><a href="../">main</a></small>
         <h1>{{ product.name }}</h1>
-        <h2><a href="./subscribe">구독</a></h2>
+        <h2><a href="./subscribe">구독<small>({{ product.subscriber_set.count }})</small></a></h2>
         <canvas id="myChart"></canvas>
         <script>
                 var ctx = document.getElementById('myChart').getContext('2d');

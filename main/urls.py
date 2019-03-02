@@ -7,4 +7,5 @@ urlpatterns = [
     path('<int:product_id>/', views.detail, name='detail'),
     path('<int:product_id>/subscribe/', views.subscribe, name='subscribe'),
     path('unsubscribe/<int:subscriber_id>', views.unsubscribe, name='unsubscribe'),
+    path('detail/<int:subscriber_id>', views.subscribe_detail, name='subscriber_detail')
 ]
