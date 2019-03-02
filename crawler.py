@@ -92,4 +92,5 @@ class Crawler:
 
 if __name__ == '__main__':
     c = Crawler()
+    c.crawl()
     c.mailing()
