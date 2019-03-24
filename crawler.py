@@ -11,56 +11,68 @@ from email.mime.text import MIMEText
 
 class Crawler:
     def __init__(self):
-        self.email_id = # YOUR EMAIL ID
-        self.email_pw = # YOUR EMAIL PASSWORD
+        self.driver = webdriver.PhantomJS()
+        self.email_id = '' # YOUR EMAIL ID
+        self.email_pw = '' # YOUR EMAIL PASSWORD
 
-    def crawl(self):
-        driver = webdriver.PhantomJS()
-        driver.get('http://prod.danawa.com/list/?cate=112752')
-        html = driver.page_source
+    def crawl_product(self):
+        print("==============================")
+        print("method crawl_product")
+        self.driver.get('http://prod.danawa.com/list/?cate=112752')
+        html = self.driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
 
-        main_prodlist = soup.find('div', {'class':'main_prodlist'}).find('ul').findAll('li', {'class':'prod_item'})
-
-        result = {}
-
-        for product in main_prodlist:
-            name = product.find('p', {'class':'prod_name'}).find('a').text.lstrip().rstrip()
-            price = product.find('p', {'class':'price_sect'}).find('a').text.lstrip().rstrip()
-            price = int(price[:-1].replace(',', ''))
-            result[name] = price
-
-        now = timezone.now()
-        print("="*35)
-        print("Start at", now)
+        main_prodlist = soup.select('div.prod_info > p > a')
         
-        product_list = result
-        for n, p in product_list.items():
+        for product in main_prodlist:
+            n = product.text.lstrip().rstrip()
+            url = product.get('href')
+
             product, created = Product.objects.get_or_create(
                 name = n
             )
 
             if created:
-                print("Create |", n)        
-            else:
-                try:
-                    latest_price = product.price_set.latest('date')
-                    latest_date = latest_price.date.date()
-                    if latest_date == now.date() and latest_price.price == p:
-                        continue
-                except:
-                    print("Error | latest_price DoesNotExist, Product :", n)
+                print("Create |", n)       
+            if product.url == '':
+                print("URL write", url)
+                product.url = url
+
+            product.save()
+
+        now = timezone.now()
+        print("Done at", now, ",", len(main_prodlist), "items")
+
+    def crawl_price(self):
+        print("==============================")
+        print("method crawl_price")
+        now = timezone.now()
+        for product in Product.objects.all():
+            self.driver.get(product.url)
+            html = self.driver.page_source
+            soup = BeautifulSoup(html, 'html.parser')
+            price = [int(p.text[:-1].replace(',', '')) for p in soup.select('span.lwst_prc')]
+            price_min = min(price)
+
+            try:
+                latest_price = product.price_set.latest('date')
+                latest_date = latest_price.date.date()
+                if latest_date == now.date() and latest_price.price == price_min:
+                    continue
+            except:
+                print("Error | latest_price DoesNotExist, Product :", product.name)
 
 
             product.price_set.create(
                 date = timezone.now(),
-                price = p
+                price = price_min
             )
-            print("Save |", n)
+            print("Save |", product.name)
             product.save()
 
         now = timezone.now()
-        print("Done at", now, ",", len(product_list), "items")
+        print("Done at", now, ",", len(Product.objects.all()), "items")
+
 
     def mailing(self):
         smtp = smtplib.SMTP('smtp.gmail.com', 587)
@@ -92,5 +104,6 @@ class Crawler:
 
 if __name__ == '__main__':
     c = Crawler()
-    c.crawl()
+    c.crawl_product()
+    c.crawl_price()
     c.mailing()
