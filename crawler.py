@@ -88,8 +88,8 @@ class Crawler:
             if now < s.expiry_date:
                 if now_price < s.min_price or s.max_price < now_price:
                     print("send", s)
-                    msg = MIMEText('Your subscription {} has reached its target price.'.format(s.product.name))
-                    msg['Subject'] = 'Alarm'
+                    msg = MIMEText('This email has been sent because you subscribed this product.\n{}\'s price is now {}\n{}'.format(s.product.name, now_price, s.product.url))
+                    msg['Subject'] = 'Product Alarm ! 😎'
                     msg['To'] = s.email
                     smtp.sendmail(self.email_id, s.email, msg.as_string())
                     s.delete()
