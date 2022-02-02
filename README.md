@@ -1,5 +1,4 @@
-# 라즈베리파이 사양이 낮아서 죽었다..
-# 영원히 죽어있을 예정. T^T
+# RAM CRAWLER and WEB VIEW
 
 # 개발환경
 - Python 3.6.5
